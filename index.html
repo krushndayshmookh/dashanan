@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashanan Blockheads</title>
+<meta name="description" content="Block-style ten-headed Dashanan (Raavan) papercraft: preview it in 3D, pick poses and moods, and download the print + assembly PDF.">
+<meta property="og:title" content="Dashanan Blockheads">
+<meta property="og:description" content="Preview the 72 cm block-style Raavan papercraft in 3D and download the print sheets.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#1A1412">
+<link rel="icon" href="./favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #FFFFFF;
+  --stage: #F4F1EA;
+  --ink: #1A1412;
+  --muted: #5C534E;
+  --cut: #767676;
+  --gold: #E9B425;
+  --gold-dark: #A86F0C;
+  --ruby: #C4161C;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Space Mono', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.app {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  height: 100vh;
+  gap: 16px;
+  padding: 16px;
+}
+.stage {
+  position: relative;
+  border: 2px dashed var(--cut);
+  padding: 8px;
+  min-height: 0;
+}
+#viewport { position: absolute; inset: 8px; background: var(--stage); overflow: hidden; }
+#viewport canvas { display: block; width: 100%; height: 100%; touch-action: none; cursor: grab; }
+#viewport canvas:active { cursor: grabbing; }
+#tip {
+  position: absolute; left: 0; top: 0; pointer-events: none;
+  background: var(--ink); color: var(--paper);
+  font-size: 12px; padding: 4px 8px; white-space: nowrap;
+}
+.views {
+  position: absolute; left: 20px; bottom: 20px; right: 20px;
+  display: flex; flex-wrap: wrap; gap: 8px;
+}
+button, .seg label {
+  font: inherit; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+  min-height: 44px; padding: 0 14px;
+  background: var(--paper); color: var(--ink);
+  border: 2px solid var(--ink); cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+button:hover, .seg label:hover { background: var(--gold); }
+.button {
+  font: inherit; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+  min-height: 48px; padding: 0 14px; gap: 10px; text-decoration: none; text-align: center;
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid var(--ink); color: var(--ink); background: var(--paper);
+}
+.button.primary { background: var(--gold); box-shadow: inset 0 -4px 0 var(--gold-dark); }
+.button.primary:hover { background: #F2C64A; }
+.button:focus-visible { outline: 3px solid var(--ruby); outline-offset: 2px; }
+.credit { margin-top: auto; padding-top: 12px; border-top: 2px dashed var(--cut); font-size: 12px; color: var(--muted); }
+.credit a { color: var(--ink); font-weight: 700; text-underline-offset: 3px; }
+.credit a:hover { color: var(--ruby); }
+.download { display: flex; flex-direction: column; gap: 10px; }
+.download .label { margin-bottom: 0; }
+.download .sub { margin: 0; }
+button:focus-visible, input:focus-visible + .chip, input:focus-visible + span, .toggle input:focus-visible {
+  outline: 3px solid var(--ruby); outline-offset: 2px;
+}
+aside {
+  display: flex; flex-direction: column; gap: 20px;
+  overflow-y: auto; min-height: 0; padding-right: 4px;
+}
+h1 { font-family: 'Pixelify Sans', monospace; font-size: 28px; line-height: 1.1; margin: 0; }
+.sub { font-size: 12px; color: var(--muted); margin: 4px 0 0; }
+fieldset { border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+legend, .label { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; padding: 0; margin-bottom: 8px; }
+.swatches { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.swatch {
+  display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 10px;
+  border: 2px solid transparent; cursor: pointer; position: relative;
+}
+.swatch input, .seg input { position: absolute; opacity: 0; pointer-events: none; }
+.swatch:has(input:checked) { border-color: var(--ink); }
+.chip { width: 24px; height: 24px; flex: none; box-shadow: inset 0 0 0 2px rgba(0,0,0,0.25); }
+.seg { display: flex; }
+.seg label { flex: 1; position: relative; }
+.seg label + label { margin-left: -2px; }
+.seg-wrap { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; }
+.seg-wrap label { margin: 0 -2px -2px 0 !important; padding: 0 6px; }
+.seg label:has(input:checked) { background: var(--ink); color: var(--paper); }
+.moods { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+.mood {
+  position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 6px 2px; min-height: 44px; border: 2px solid transparent; cursor: pointer;
+  font-size: 10px; line-height: 1.2; text-align: center;
+}
+.mood input { position: absolute; opacity: 0; pointer-events: none; }
+.mood canvas { width: 40px; height: 40px; image-rendering: pixelated; }
+.mood:hover { border-color: var(--cut); }
+.mood:has(input:checked) { border-color: var(--ink); }
+.mood:has(input:focus-visible) { outline: 3px solid var(--ruby); outline-offset: 2px; }
+.toggle { display: flex; align-items: center; gap: 12px; min-height: 44px; cursor: pointer; }
+.toggle input { width: 22px; height: 22px; margin: 0; accent-color: var(--ink); cursor: pointer; }
+.card { border: 2px dashed var(--cut); padding: 14px 16px; }
+#info-label { font-weight: 700; }
+#info-dims, #info-sheet { font-size: 12px; color: var(--muted); }
+dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: 12px; }
+dt { font-weight: 700; }
+dd { margin: 0; color: var(--muted); }
+.actions { display: flex; gap: 8px; }
+.actions button { flex: 1; }
+
+@media (max-width: 860px) {
+  .app { grid-template-columns: minmax(0, 1fr); height: auto; padding: 16px; }
+  .stage { height: 68vh; }
+  aside { overflow: visible; }
+  .views button { flex: 1 1 calc(33% - 8px); padding: 0 6px; }
+}
+</style>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+<div class="app">
+  <main class="stage" aria-label="3D viewer">
+    <div id="viewport"><div id="tip" hidden></div></div>
+    <div class="views" role="group" aria-label="Camera views">
+      <button type="button" data-view="front">Front</button>
+      <button type="button" data-view="back">Back</button>
+      <button type="button" data-view="right">Right side</button>
+      <button type="button" data-view="left">Left side</button>
+      <button type="button" data-view="angle">3/4</button>
+    </div>
+  </main>
+
+  <aside>
+    <header>
+      <h1>Dashanan Blockheads</h1>
+      <p class="sub">72 cm block-style Raavan · ten 9 cm heads · 3D preview</p>
+    </header>
+
+    <div class="card" aria-live="polite">
+      <div id="info-label"></div>
+      <div id="info-dims"></div>
+      <div id="info-sheet"></div>
+    </div>
+
+    <fieldset>
+      <legend>Pose</legend>
+      <div class="seg seg-wrap">
+        <label><input type="radio" name="pose" value="stand" autocomplete="off"><span>Stand</span></label>
+        <label><input type="radio" name="pose" value="run" checked autocomplete="off"><span>Run</span></label>
+        <label><input type="radio" name="pose" value="cycle" autocomplete="off"><span>Run cycle</span></label>
+        <label><input type="radio" name="pose" value="strike" autocomplete="off"><span>Strike</span></label>
+        <label><input type="radio" name="pose" value="victory" autocomplete="off"><span>Victory</span></label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Primary head</legend>
+      <div class="moods" id="moods"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Skin</legend>
+      <div class="swatches" id="skins"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Crown backdrop</legend>
+      <div class="seg">
+        <label><input type="radio" name="crown" value="black" autocomplete="off" checked><span>Black</span></label>
+        <label><input type="radio" name="crown" value="cut-out" autocomplete="off"><span>Cut-out</span></label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Display</legend>
+      <label class="toggle"><input type="checkbox" id="heads" checked autocomplete="off"> Secondary heads</label>
+      <label class="toggle"><input type="checkbox" id="plank" autocomplete="off"> Head plank</label>
+      <label class="toggle"><input type="checkbox" id="explode" autocomplete="off"> Exploded view</label>
+      <label class="toggle"><input type="checkbox" id="spin" autocomplete="off"> Turntable</label>
+      <label class="toggle"><input type="checkbox" id="base" checked autocomplete="off"> Base board</label>
+    </fieldset>
+
+    <div>
+      <div class="label">Assembled size</div>
+      <dl>
+        <dt>Height</dt><dd>crown 9 · head 9 · plank 1 · body 27 · legs 27</dd>
+        <dt>Width</dt><dd>90 cm across the heads, 36 cm across the arms</dd>
+        <dt>Depth</dt><dd>9 cm, everything lines up front and back</dd>
+      </dl>
+    </div>
+
+    <div class="download">
+      <div class="label">Build your own</div>
+      <p class="sub">38 A4 card sheets: heads, body, limbs, shield, sword, crowns, plus the 5-page assembly guide. Print at 100%.</p>
+      <!-- PDF link placeholder: drop the file at assets/dashanan-blockheads-print.pdf, or swap in another URL. -->
+      <a class="button primary" id="pdf" href="./assets/dashanan-blockheads-print.pdf" download>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 21h16"/></svg>
+        Download PDF · print + assembly
+      </a>
+    </div>
+
+    <div class="actions">
+      <button type="button" id="snap">Save PNG</button>
+    </div>
+
+    <footer class="credit">Created by <a href="https://github.com/krushndayshmookh">Krushn</a> and Claude</footer>
+  </aside>
+</div>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
